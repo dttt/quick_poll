@@ -3,3 +3,5 @@
 /quick_poll/django/
 /quick_poll/djangoappengine/
 /quick_poll/djangotoolbox/
+*.pyc
+*.pyo
