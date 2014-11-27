@@ -1,7 +1,18 @@
-<form role="form" action="" method="post">
-    <div class="form-group">
-        <label for="content">Poll's content</label>
-        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="What is this poll about?">
+{% load poll_tags %}
+<div class="form-group">
+    <div id="poll_content">
+    <label for="poll">Poll's content</label>
+    <input type="text" class="form-control" id="poll" placeholder="What is this poll about?">
     </div>
-    <button type="submit" class="btn btn-default">Create now</button>
-</form>
+    <div id="option_list">
+    <label>Options:</label>
+    {% for i in "1234" %}
+        <div class="input-group">
+            <span class="input-group-addon">{{ i }}</span>
+            <input type="text" class="form-control option{{ i|last_option }}" id="option_{{ i }} "placeholder="Leave flank if you don't use it" data-order="{{ i }}">
+        </div>
+    {% endfor %}
+    </div>
+    {% csrf_token %}
+    <button id="create" class="btn btn-primary">Create</button>
+</div>

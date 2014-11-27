@@ -6,7 +6,11 @@ from django.core.urlresolvers import reverse
 
 def generate_id(size=6, chars=string.ascii_uppercase + string.digits):
     random_id = ''.join(random.choice(chars) for _ in range(size))
-    existed = Poll.objects.get(random_id=random_id)
+    try:
+        existed = Poll.objects.get(random_id=random_id)
+    except Poll.DoesNotExist:
+        existed = None
+
     if not existed:
         return random_id
     else:
@@ -24,7 +28,12 @@ class Poll(models.Model):
         return self.random_id
 
     def get_absolute_url(self):
-        return self.random_id
+        return reverse('poll:show', args=(self.random_id,))
+
+    def save(self, *args, **kwargs):
+        if not self.random_id:
+            self.random_id = generate_id()
+        super(Poll, self).save()
 
 
 class Option(models.Model):

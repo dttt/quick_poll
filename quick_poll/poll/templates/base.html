@@ -13,10 +13,12 @@
     {% endblock %}
 </head>
 <body>
-    <!--
     <div id="logo" class="text-center">
-        <img src="{% static "images/logo-tvdd.png" %}">
-    </div>-->
+        <img src="{% static "images/poll-everywhere.png" %}">
+    </div>
+    <div id="loading_gif" class="text-center">
+        <img src="{% static "images/ajax-loader.gif" %}">
+    </div>
     <div id="pages" class="container">
         <div id="message">
             {#% include "message.html" %#}
@@ -32,6 +34,7 @@
     {% block javascript %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="{% static "js/jquery.cookie.js" %}"></script>
         <script type="text/javascript" src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
         <script type="text/javascript" src="{% static "js/custom.js" %}"></script>
         <script type="text/javascript" src="{% static "js/bootstrap-combobox.js" %}"></script>

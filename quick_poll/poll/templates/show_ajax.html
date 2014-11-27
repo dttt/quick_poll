@@ -1,0 +1,12 @@
+<div id="about_poll" class="row">
+    <div id="poll_content" class="col-md-12">{{ poll.content }}</div>
+    <div id="option_list" class="col-md-6">
+    {% for option in poll.option_set.all %}
+        <div class="input-group">
+            <span class="input-group-addon"><input type="radio" name="voted_option" data-voted="{{ option.voted }}" id="{{ option.id }}" data-content="{{ option }}"></span>
+            <input type="text" class="form-control" value="{{ option }}" disabled="true">
+        </div>
+    {% endfor %}
+    {% csrf_token %}
+    <button id="vote" class="btn btn-primary">Vote</button>
+</div>
