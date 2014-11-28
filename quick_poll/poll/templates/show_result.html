@@ -1,0 +1,7 @@
+{% extends 'show.html' %}
+{% block javascript %}
+    {{ block.super }}
+    <script type="text/javascript">
+        draw_graph(data);
+    </script>
+{% endblock %}

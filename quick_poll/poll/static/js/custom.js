@@ -1,3 +1,5 @@
+google.load('visualization', '1.0', {'packages':['corechart']});
+
 $(document).ready(function (){
     $("#loading_gif").hide();
 });
@@ -60,10 +62,6 @@ $(document).on('click', '#create', function(){
     var options_val = get_options(options);
     if (options_val.length >= 2) {
         var poll = document.getElementById('poll').value;
-        /*
-        for (var i = 0; i < options.length; i++) {
-            options_val.push(options[i].value);
-        }*/
 
         var json_options = JSON.stringify(options_val);
         var csrftoken = $.cookie('csrftoken');
@@ -128,3 +126,61 @@ $(document).on('change', '.last_option', function(){
     $(this).toggleClass('last_option');
     $("#option_list").append(div_e.append(span_e, input_e));
 });
+
+
+$(document).on('click', '#vote', function(e){
+    e.preventDefault();
+    var voted = $('#vote_form input[name=voted_option]:checked').val();
+    var csrftoken = $.cookie('csrftoken');
+    $.ajax({
+        type: "POST",
+        url: $(this).attr('href'),
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        },
+        data: {'voted': voted},
+    })
+    .done(function(data) {
+        draw_graph(data);
+    });
+});
+
+
+$(document).on('click', '#show_result', function(e){
+    e.preventDefault();
+    var url = $(this).attr('href');
+    $.ajax({
+        type: "GET",
+        url: url,
+    })
+    .done(function(data) {
+        draw_graph(data);
+        window.history.pushState(null, null, url)
+    })
+    .fail(function() {
+        alert('fail');
+    });
+});
+
+
+function draw_graph(data) {
+    var rows = []
+    for (var i = 0; i < data.length; i++) {
+        option = data[i];
+        rows.push([option.content, parseInt(option.voted)]);
+    }
+
+    var data_table = new google.visualization.DataTable();
+    data_table.addColumn('string', 'Content');
+    data_table.addColumn('number', 'Voted');
+    data_table.addRows(rows);
+    var options = {
+        title: 'Result',
+        width: '100%',
+        height: '100%'
+    };
+    var chart = new google.visualization.PieChart(document.getElementById('option_result'));
+    chart.draw(data_table, options);
+}
