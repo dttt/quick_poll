@@ -51,13 +51,13 @@ function change(state) {
     replace_content('#main', change_ajax(window.location));
 }
 
+
 $(window).bind("popstate", function(e) {
-    //change(e.originalEvent.state);
-    //replace_content('#main', change_ajax(window.location));
     change_ajax(window.location);
 });
 
-$(document).on('click', '#create', function(){
+$(document).on('click', '#create', function(e){
+    e.preventDefault();
     var options = document.getElementsByClassName('option');
     var options_val = get_options(options);
     if (options_val.length >= 2) {
@@ -131,20 +131,26 @@ $(document).on('change', '.last_option', function(){
 $(document).on('click', '#vote', function(e){
     e.preventDefault();
     var voted = $('#vote_form input[name=voted_option]:checked').val();
-    var csrftoken = $.cookie('csrftoken');
-    $.ajax({
-        type: "POST",
-        url: $(this).attr('href'),
-        beforeSend: function(xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        },
-        data: {'voted': voted},
-    })
-    .done(function(data) {
-        draw_graph(data);
-    });
+    var cookie = $.cookie('dtdmpoll');
+    if (cookie == null) {
+        $.cookie('dtdmpoll', voted, { expires: 7, path: '/' });
+        var csrftoken = $.cookie('csrftoken');
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('href'),
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
+            data: {'voted': voted},
+        })
+        .done(function(data) {
+            draw_graph(data);
+        });
+    } else {
+        alert("You voted for this poll already.");
+    }
 });
 
 
