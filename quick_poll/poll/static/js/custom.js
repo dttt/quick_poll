@@ -60,6 +60,7 @@ $(document).on('click', '#create', function(e){
     e.preventDefault();
     var options = document.getElementsByClassName('option');
     var options_val = get_options(options);
+    var url = $(this).attr('href');
     if (options_val.length >= 2) {
         var poll = document.getElementById('poll').value;
 
@@ -68,7 +69,7 @@ $(document).on('click', '#create', function(e){
 
         $.ajax({
             type: "POST",
-            url: "/ajax/create/",
+            url: url,
             beforeSend: function(xhr, settings) {
                 if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
                     xhr.setRequestHeader("X-CSRFToken", csrftoken);
@@ -77,10 +78,10 @@ $(document).on('click', '#create', function(e){
             data: {"poll": poll, "options": json_options},
         })
         .done(function(data) {
-            url = data.url;
+            poll_url = data.url;
             html = data.html;
             if (supported_api()) {
-                window.history.pushState(null, null, url);
+                window.history.pushState(null, null, poll_url);
                 replace_content('#main', html);
             }
         })

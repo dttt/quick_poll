@@ -1,14 +1,20 @@
-<div id="poll_content" data-id="{{ poll.random_id }}"><blockquote class="text-center">{{ poll.content }}</blockquote></div>
-<div id="option_list">
-    <form id="vote_form">
-    {% for option in poll.option_set.all %}
-        <div class="input-group">
-            <span class="input-group-addon"><input type="radio" name="voted_option" data-voted="{{ option.voted }}" value="{{ option.id }}" data-content="{{ option }}"></span>
-            <input type="text" class="form-control" value="{{ option }}" disabled="true">
-        </div>
-    {% endfor %}
-    </form>
-    {% csrf_token %}
-    <a id="vote" class="btn btn-primary" href="{{ poll.get_vote_url }}">Vote</a>
-    <a id="show_result" class="btn btn-primary pull-right" href="{{ poll.get_result_url }}">Result</a>
+<div id="about_poll" class="col-md-8 col-md-offset-2">
+    <div id="poll_content" data-id="{{ poll.random_id }}">
+        <blockquote class="text-center">{{ poll.content }}</blockquote>
+    </div>
+    <div id="option_list">
+        <form id="vote_form">
+        {% for option in poll.option_set.all %}
+            <div class="input-group">
+                <span class="input-group-addon"><input type="radio" name="voted_option" data-voted="{{ option.voted }}" value="{{ option.id }}" data-content="{{ option }}"></span>
+                <input type="text" class="form-control" value="{{ option }}" disabled="true">
+            </div>
+        {% endfor %}
+        </form>
+        {% csrf_token %}
+        <a id="vote" class="btn btn-primary" href="{{ poll.get_vote_url }}">Vote</a>
+        <a id="show_result" class="btn btn-primary pull-right" href="{{ poll.get_result_url }}">Result</a>
+    </div>
+    <div id="option_result" class="1center-block">
+    </div>
 </div>

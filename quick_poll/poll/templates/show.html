@@ -1,8 +1,4 @@
 {% extends 'base.html' %}
 {% block main_content %}
-    <div id="about_poll" class="col-md-8 col-md-offset-2">
-        {% include 'show_ajax.html' with poll=poll %}
-    <div id="option_result" class="1center-block">
-    </div>
-    </div>
+    {% include 'show_ajax.html' with poll=poll %}
 {% endblock %}
