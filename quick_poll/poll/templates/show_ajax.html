@@ -1,6 +1,5 @@
-<div id="about_poll" class="col-md-6 col-md-offset-3">
-    <div id="poll_content"><blockquote class="text-center">{{ poll.content }}</blockquote></div>
-    <div id="option_list">
+<div id="poll_content" data-id="{{ poll.random_id }}"><blockquote class="text-center">{{ poll.content }}</blockquote></div>
+<div id="option_list">
     <form id="vote_form">
     {% for option in poll.option_set.all %}
         <div class="input-group">
@@ -9,8 +8,6 @@
         </div>
     {% endfor %}
     </form>
-    <div id="option_result" class="center-block">
-    </div>
     {% csrf_token %}
     <a id="vote" class="btn btn-primary" href="{{ poll.get_vote_url }}">Vote</a>
     <a id="show_result" class="btn btn-primary pull-right" href="{{ poll.get_result_url }}">Result</a>

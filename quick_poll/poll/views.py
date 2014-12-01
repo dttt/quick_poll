@@ -1,7 +1,6 @@
 import json
-from django.shortcuts import render, get_object_or_404
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render
+from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
 from poll.models import Poll, Option
@@ -23,11 +22,12 @@ def create(request):
         for option in poll_options:
             poll.option_set.create(content=option)
 
-        data_json = {'html' :render_to_string('show_ajax.html', {'poll': poll}),
-                            'url': poll.get_absolute_url()}
+        data_json = {
+            'html': render_to_string('show_ajax.html', {'poll': poll}),
+            'url': poll.get_absolute_url()
+        }
 
         return HttpResponse(json.dumps(data_json), mimetype='application/json')
-
 
 
 def show(request, random_id):
@@ -43,7 +43,9 @@ def get_result_json(poll):
     options = poll.option_set.all()
     data_json = []
     for option in options:
-        data_json.append({'content': option.content, 'id': option.id, 'voted': option.voted})
+        data_json.append({
+            'content': option.content, 'id': option.id, 'voted': option.voted
+        })
     return data_json
 
 
@@ -52,12 +54,12 @@ def vote(request, random_id):
         poll = Poll.objects.get(random_id=random_id)
         voted_option = Option.objects.get(id=request.POST.get('voted'))
         voted_option.upvote()
-        return HttpResponse(json.dumps(get_result_json(poll)),
-            mimetype='application/json')
+        return HttpResponse(
+            json.dumps(get_result_json(poll)), mimetype='application/json')
+
 
 def result(request, random_id):
     poll = Poll.objects.get(random_id=random_id)
     if request.is_ajax():
-        return HttpResponse(json.dumps(get_result_json(poll)),
-            mimetype='application/json')
-
+        return HttpResponse(
+            json.dumps(get_result_json(poll)), mimetype='application/json')

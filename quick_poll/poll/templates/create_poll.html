@@ -14,5 +14,5 @@
     {% endfor %}
     </div>
     {% csrf_token %}
-    <a id="create" class="btn btn-primary" data-role="ajax" href="/ajax/create">Create</a>
+    <a id="create" class="btn btn-primary" data-role="ajax" href="{% url 'create' %}">Create</a>
 </div>

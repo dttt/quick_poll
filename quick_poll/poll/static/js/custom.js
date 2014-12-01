@@ -131,9 +131,10 @@ $(document).on('change', '.last_option', function(){
 $(document).on('click', '#vote', function(e){
     e.preventDefault();
     var voted = $('#vote_form input[name=voted_option]:checked').val();
-    var cookie = $.cookie('dtdmpoll');
+    var cookie_name = 'dtdm' + $('#poll_content').attr('data-id');
+    var cookie = $.cookie(cookie_name);
     if (cookie == null) {
-        $.cookie('dtdmpoll', voted, { expires: 7, path: '/' });
+        $.cookie(cookie_name, voted, { expires: 7, path: '/' });
         var csrftoken = $.cookie('csrftoken');
         $.ajax({
             type: "POST",
@@ -163,7 +164,6 @@ $(document).on('click', '#show_result', function(e){
     })
     .done(function(data) {
         draw_graph(data);
-        window.history.pushState(null, null, url)
     })
     .fail(function() {
         alert('fail');

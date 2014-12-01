@@ -4,6 +4,7 @@ import string
 import random
 from django.core.urlresolvers import reverse
 
+
 def generate_id(size=6, chars=string.ascii_uppercase + string.digits):
     random_id = ''.join(random.choice(chars) for _ in range(size))
     try:
@@ -28,13 +29,13 @@ class Poll(models.Model):
         return self.random_id
 
     def get_absolute_url(self):
-        return reverse('poll:show', args=(self.random_id,))
+        return reverse('show', args=(self.random_id,))
 
     def get_result_url(self):
-        return reverse('poll:result', args=(self.random_id,))
+        return reverse('result', args=(self.random_id,))
 
     def get_vote_url(self):
-        return reverse('poll:vote', args=(self.random_id,))
+        return reverse('vote', args=(self.random_id,))
 
     def save(self, *args, **kwargs):
         if not self.random_id:
